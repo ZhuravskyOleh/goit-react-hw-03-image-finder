@@ -14,8 +14,8 @@ class Searchbar extends Component {
   handlerSubmit = e => {
     e.preventDefault();
     this.setState({ value: '' });
-    const word = e.target.elements[1].value.trim();
-    if (word) this.props.onSubmit(word);
+    const searchValue = e.target.elements[1].value.trim();
+    if (searchValue) this.props.onSubmit(searchValue);
   };
 
   onChange = e => this.setState({ value: e.target.value });

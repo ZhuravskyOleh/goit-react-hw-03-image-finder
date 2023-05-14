@@ -12,7 +12,7 @@ import Modal from 'components/Modal/Modal';
 class App extends Component {
   state = {
     // resesarch word
-    word: '',
+    searchValue: '',
 
     // array of gallery objects
     gallery: [],
@@ -37,23 +37,23 @@ class App extends Component {
   }
 
   // helper function for working with request api
-  requestToApi = async (word, currentGallery) => {
+  requestToApi = async (searchValue, currentGallery) => {
     this.setState({ isLoading: true });
     try {
       const { reqGallery, isMore } = await API.readData(
-        word,
+        searchValue,
         Math.floor(currentGallery.length / PER_PAGE) + 1
       );
 
       this.setState({
         gallery: [...currentGallery, ...reqGallery],
         isMore,
-        word,
+        searchValue,
       });
     } catch (error) {
       console.error(error);
       this.setState({
-        word: '',
+        searchValue: '',
         gallery: [],
         isMore: false,
       });
@@ -63,51 +63,50 @@ class App extends Component {
   };
 
   // submit new word
-  handlerSubmit = word => {
+  handleSubmit = searchValue => {
     this.setState({
-      word,
+      searchValue,
       gallery: [],
       isLoading: true,
     });
 
-    this.requestToApi(word, []);
+    this.requestToApi(searchValue, []);
   };
 
-  // press button 'read more'
-  handlerMore = () => {
-    this.requestToApi(this.state.word, this.state.gallery);
+ 
+  handleMore = () => {
+    this.requestToApi(this.state.searchValue, this.state.gallery);
   };
 
-  // click to element of gallery
+  
   onClickToGallery = modalImg => {
     this.setState({ modalImg });
   };
 
-  // close modal window
+  
   closeModal = () => this.setState({ modalImg: null });
 
   render() {
     const { gallery, isMore, isLoading, modalImg } = this.state;
     return (
       <Wrap>
-        {/* modal */}
+       
         {modalImg && (
           <Modal closeWindow={this.closeModal}>
             <img src={modalImg?.img} alt={modalImg?.alt} />
           </Modal>
         )}
 
-        {/* search bar */}
-        <Searchbar onSubmit={this.handlerSubmit} isDisabled={isLoading} />
-        {/* gallery list */}
+        <Searchbar onSubmit={this.handleSubmit} isDisabled={isLoading} />
+        
         <ImageGallery
           gallery={gallery}
           onClickToGallery={this.onClickToGallery}
         />
-        {/* loader */}
+      
         <Loader visible={isLoading} />
-        {/* button 'Load more' */}
-        {isMore && <Button isDisabled={isLoading} onClick={this.handlerMore} />}
+        
+        {isMore && <Button isDisabled={isLoading} onClick={this.handleMore} />}
       </Wrap>
     );
   }
