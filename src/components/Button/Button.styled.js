@@ -1,6 +1,8 @@
 const { default: styled } = require('styled-components');
 
 export const Btn = styled.button`
+  width: 60px;
+  margin: 0 auto;
   padding: 8px 16px;
   border-radius: 2px;
   background-color: #3f51b5;
